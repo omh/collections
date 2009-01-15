@@ -51,7 +51,10 @@ OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (id) init;
 {
-    shortCutIds = [[NSMutableDictionary alloc] init];        
+    if ( [super init] == self )
+    {
+        shortCutIds = [[NSMutableDictionary alloc] init]        
+    }
     return self;
 }
 

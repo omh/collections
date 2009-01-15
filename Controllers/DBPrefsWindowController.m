@@ -11,11 +11,13 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 @implementation DBPrefsWindowController
 
 
+@synthesize crossFade;
+@synthesize shiftSlowsAnimation;
+@synthesize animationDuration;
 
 
 #pragma mark -
 #pragma mark Class Methods
-
 
 + (DBPrefsWindowController *)sharedWindowController
 {
@@ -26,21 +28,15 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	return _sharedPrefsWindowController;
 }
 
-
-
-
-+ (NSString *)nibName
++ (NSString *) nibName
 	// Subclasses can override this to use a nib with a different name.
 {
    return @"Preferences";
 }
 
 
-
-
 #pragma mark -
 #pragma mark Setup & Teardown
-
 
 - (id)initWithWindow:(NSWindow *)window
   // -initWithWindow: is the designated initializer for NSWindowController.
@@ -61,14 +57,12 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 		
 		[self setCrossFade:YES]; 
 		[self setShiftSlowsAnimation:YES];
+        [self setAnimationDuration:0.25];
 	}
 	return self;
 
 	(void)window;  // To prevent compiler warnings.
 }
-
-
-
 
 - (void)windowDidLoad
 {
@@ -88,10 +82,8 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	[[self window] setShowsToolbarButton:NO];
 }
 
-
-
-
-- (void) dealloc {
+- (void) dealloc 
+{
 	[toolbarIdentifiers release];
 	[toolbarViews release];
 	[toolbarItems release];
@@ -100,11 +92,8 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 }
 
 
-
-
 #pragma mark -
 #pragma mark Configuration
-
 
 - (void)setupToolbar
 {
@@ -112,18 +101,12 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	// toolbar by calling -addView:label: or -addView:label:image:.
 }
 
-
-
-
 - (void)addView:(NSView *)view label:(NSString *)label
 {
 	[self addView:view
 			label:label
 			image:[NSImage imageNamed:label]];
 }
-
-
-
 
 - (void)addView:(NSView *)view label:(NSString *)label image:(NSImage *)image
 {
@@ -145,47 +128,8 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 }
 
 
-
-
-#pragma mark -
-#pragma mark Accessor Methods
-
-
-- (BOOL)crossFade
-{
-    return _crossFade;
-}
-
-
-
-
-- (void)setCrossFade:(BOOL)fade
-{
-    _crossFade = fade;
-}
-
-
-
-
-- (BOOL)shiftSlowsAnimation
-{
-    return _shiftSlowsAnimation;
-}
-
-
-
-
-- (void)setShiftSlowsAnimation:(BOOL)slows
-{
-    _shiftSlowsAnimation = slows;
-}
-
-
-
-
 #pragma mark -
 #pragma mark Overriding Methods
-
 
 - (IBAction)showWindow:(id)sender 
 {
@@ -222,11 +166,8 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 }
 
 
-
-
 #pragma mark -
 #pragma mark Toolbar
-
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
@@ -235,9 +176,6 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	(void)toolbar;
 }
 
-
-
-
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar 
 {
 	return toolbarIdentifiers;
@@ -245,17 +183,11 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	(void)toolbar;
 }
 
-
-
-
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
 	return toolbarIdentifiers;
 	(void)toolbar;
 }
-
-
-
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)identifier willBeInsertedIntoToolbar:(BOOL)willBeInserted 
 {
@@ -264,16 +196,10 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	(void)willBeInserted;
 }
 
-
-
-
 - (void)toggleActivePreferenceView:(NSToolbarItem *)toolbarItem
 {
 	[self displayViewForIdentifier:[toolbarItem itemIdentifier] animate:YES];
 }
-
-
-
 
 - (void)displayViewForIdentifier:(NSString *)identifier animate:(BOOL)animate
 {	
@@ -318,20 +244,17 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 }
 
 
-
-
 #pragma mark -
 #pragma mark Cross-Fading Methods
-
 
 - (void)crossFadeView:(NSView *)oldView withView:(NSView *)newView
 {
 	[viewAnimation stopAnimation];
 	
     if ([self shiftSlowsAnimation] && [[[self window] currentEvent] modifierFlags] & NSShiftKeyMask)
-		[viewAnimation setDuration:1.25];
+		[viewAnimation setDuration:self.animationDuration * 10];
     else
-		[viewAnimation setDuration:0.25];
+		[viewAnimation setDuration:self.animationDuration];
 	
 	NSDictionary *fadeOutDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 		oldView, NSViewAnimationTargetKey,
@@ -359,9 +282,6 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	[viewAnimation startAnimation];
 }
 
-
-
-
 - (void)animationDidEnd:(NSAnimation *)animation
 {
 	NSView *subview;
@@ -387,9 +307,6 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	(void)animation;
 }
 
-
-
-
 - (NSRect)frameForView:(NSView *)view
 	// Calculate the window size for the new view.
 {
@@ -403,8 +320,5 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	
 	return windowFrame;
 }
-
-
-
 
 @end

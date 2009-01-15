@@ -47,30 +47,34 @@
 	NSMutableArray *toolbarIdentifiers;
 	NSMutableDictionary *toolbarViews;
 	NSMutableDictionary *toolbarItems;
-	
-	BOOL _crossFade;
-	BOOL _shiftSlowsAnimation;
-	
+    
 	NSView *contentSubview;
 	NSViewAnimation *viewAnimation;
+    
+    BOOL crossFade;
+	BOOL shiftSlowsAnimation;
+	NSTimeInterval animationDuration;    
 }
 
+@property (nonatomic, assign) BOOL crossFade;
+@property (nonatomic, assign) BOOL shiftSlowsAnimation;
+@property (nonatomic, assign) NSTimeInterval animationDuration;
 
-+ (DBPrefsWindowController *)sharedWindowController;
-+ (NSString *)nibName;
++ (DBPrefsWindowController *) sharedWindowController;
++ (NSString *) nibName;
 
-- (void)setupToolbar;
-- (void)addView:(NSView *)view label:(NSString *)label;
-- (void)addView:(NSView *)view label:(NSString *)label image:(NSImage *)image;
+- (void) setupToolbar;
+- (void) addView:(NSView *)view label:(NSString *)label;
+- (void) addView:(NSView *)view label:(NSString *)label image:(NSImage *)image;
 
-- (BOOL)crossFade;
-- (void)setCrossFade:(BOOL)fade;
-- (BOOL)shiftSlowsAnimation;
-- (void)setShiftSlowsAnimation:(BOOL)slows;
+- (BOOL) crossFade;
+- (void) setCrossFade:(BOOL)fade;
+- (BOOL) shiftSlowsAnimation;
+- (void) setShiftSlowsAnimation:(BOOL)slows;
 
-- (void)displayViewForIdentifier:(NSString *)identifier animate:(BOOL)animate;
-- (void)crossFadeView:(NSView *)oldView withView:(NSView *)newView;
-- (NSRect)frameForView:(NSView *)view;
+- (void) displayViewForIdentifier:(NSString *)identifier animate:(BOOL)animate;
+- (void) crossFadeView:(NSView *)oldView withView:(NSView *)newView;
+- (NSRect) frameForView:(NSView *)view;
 
 
 @end

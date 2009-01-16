@@ -55,9 +55,9 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 		[viewAnimation setAnimationCurve:NSAnimationEaseInOut];
 		[viewAnimation setDelegate:self];
 		
-		[self setCrossFade:YES]; 
-		[self setShiftSlowsAnimation:YES];
-        [self setAnimationDuration:0.25];
+		crossFade = YES; 
+        shiftSlowsAnimation = YES;
+        animationDuration = 0.25;
 	}
 	return self;
 
@@ -203,43 +203,47 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 
 - (void)displayViewForIdentifier:(NSString *)identifier animate:(BOOL)animate
 {	
-		// Find the view we want to display.
+    // Find the view we want to display.
 	NSView *newView = [toolbarViews objectForKey:identifier];
 
-		// See if there are any visible views.
+    // See if there are any visible views.
 	NSView *oldView = nil;
-	if ([[contentSubview subviews] count] > 0) {
-			// Get a list of all of the views in the window. Usually at this
-			// point there is just one visible view. But if the last fade
-			// hasn't finished, we need to get rid of it now before we move on.
+	if ([[contentSubview subviews] count] > 0) 
+    {
+        // Get a list of all of the views in the window. Usually at this
+        // point there is just one visible view. But if the last fade
+        // hasn't finished, we need to get rid of it now before we move on.
 		NSEnumerator *subviewsEnum = [[contentSubview subviews] reverseObjectEnumerator];
 		
-			// The first one (last one added) is our visible view.
+        // The first one (last one added) is our visible view.
 		oldView = [subviewsEnum nextObject];
 		
-			// Remove any others.
+        // Remove any others.
 		NSView *reallyOldView = nil;
-		while ((reallyOldView = [subviewsEnum nextObject]) != nil) {
+		while ( ( reallyOldView = [subviewsEnum nextObject]) != nil ) 
+        {
 			[reallyOldView removeFromSuperviewWithoutNeedingDisplay];
 		}
 	}
 	
-	if (![newView isEqualTo:oldView]) {		
+	if ( ![newView isEqualTo:oldView] ) 
+    {		
 		NSRect frame = [newView bounds];
-		frame.origin.y = NSHeight([contentSubview frame]) - NSHeight([newView bounds]);
+		frame.origin.y = NSHeight( [contentSubview frame] ) - NSHeight( [newView bounds] );
 		[newView setFrame:frame];
 		[contentSubview addSubview:newView];
-		[[self window] setInitialFirstResponder:newView];
-
-		if (animate && [self crossFade])
+		[self.window setInitialFirstResponder:newView];
+        
+		if ( animate && [self crossFade] )
 			[self crossFadeView:oldView withView:newView];
-		else {
+		else 
+        {
 			[oldView removeFromSuperviewWithoutNeedingDisplay];
 			[newView setHidden:NO];
-			[[self window] setFrame:[self frameForView:newView] display:YES animate:animate];
+			[self.window setFrame:[self frameForView:newView] display:YES animate:animate];
 		}
 		
-		[[self window] setTitle:[[toolbarItems objectForKey:identifier] label]];
+		[self.window setTitle:[[toolbarItems objectForKey:identifier] label]];
 	}
 }
 
@@ -251,7 +255,7 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 {
 	[viewAnimation stopAnimation];
 	
-    if ([self shiftSlowsAnimation] && [[[self window] currentEvent] modifierFlags] & NSShiftKeyMask)
+    if ( self.shiftSlowsAnimation && [[self.window currentEvent] modifierFlags] & NSShiftKeyMask)
 		[viewAnimation setDuration:self.animationDuration * 10];
     else
 		[viewAnimation setDuration:self.animationDuration];
@@ -286,23 +290,24 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 {
 	NSView *subview;
 	
-		// Get a list of all of the views in the window. Hopefully
-		// at this point there are two. One is visible and one is hidden.
+    // Get a list of all of the views in the window. Hopefully
+    // at this point there are two. One is visible and one is hidden.
 	NSEnumerator *subviewsEnum = [[contentSubview subviews] reverseObjectEnumerator];
 	
-		// This is our visible view. Just get past it.
+    // This is our visible view. Just get past it.
 	subview = [subviewsEnum nextObject];
 
-		// Remove everything else. There should be just one, but
-		// if the user does a lot of fast clicking, we might have
-		// more than one to remove.
-	while ((subview = [subviewsEnum nextObject]) != nil) {
+    // Remove everything else. There should be just one, but
+    // if the user does a lot of fast clicking, we might have
+    // more than one to remove.
+	while ( ( subview = [subviewsEnum nextObject]) != nil ) 
+    {
 		[subview removeFromSuperviewWithoutNeedingDisplay];
 	}
 
-		// This is a work-around that prevents the first
-		// toolbar icon from becoming highlighted.
-	[[self window] makeFirstResponder:nil];
+    // This is a work-around that prevents the first
+    // toolbar icon from becoming highlighted.
+	[self.window makeFirstResponder:nil];
 
 	(void)animation;
 }
@@ -314,9 +319,9 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 	NSRect contentRect = [[self window] contentRectForFrameRect:windowFrame];
 	float windowTitleAndToolbarHeight = NSHeight(windowFrame) - NSHeight(contentRect);
 
-	windowFrame.size.height = NSHeight([view frame]) + windowTitleAndToolbarHeight;
-	windowFrame.size.width = NSWidth([view frame]);
-	windowFrame.origin.y = NSMaxY([[self window] frame]) - NSHeight(windowFrame);
+	windowFrame.size.height = NSHeight( [view frame] ) + windowTitleAndToolbarHeight;
+	windowFrame.size.width = NSWidth( [view frame] );
+	windowFrame.origin.y = NSMaxY( [self.window frame] ) - NSHeight( windowFrame );
 	
 	return windowFrame;
 }

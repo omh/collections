@@ -66,9 +66,9 @@ static DBPrefsWindowController *_sharedPrefsWindowController = nil;
 
 - (void)windowDidLoad
 {
-		// Create a new window to display the preference views.
-		// If the developer attached a window to this controller
-		// in Interface Builder, it gets replaced with this one.
+    // Create a new window to display the preference views.
+    // If the developer attached a window to this controller
+    // in Interface Builder, it gets replaced with this one.
 	NSWindow *window = [[[NSWindow alloc] initWithContentRect:NSMakeRect(0,0,1000,1000)
 												    styleMask:(NSTitledWindowMask |
 															   NSClosableWindowMask |

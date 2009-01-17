@@ -71,9 +71,10 @@
         return;
     }
 
-    NSColor *color = [NSColor colorWithCalibratedRed:0.90588 green:0.98823 blue:0.88627 alpha:1];
+    NSColor *color = [NSColor colorWithCalibratedRed:216.00 / 255.00 green:248.00 / 255.00 blue:184.00 / 255.00 alpha:1];
     NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[color highlightWithLevel:0.25]
                                                          endingColor:[color shadowWithLevel:0.10]];
+
     [gradient drawInRect:cellFrame angle:90];
    
     [[color shadowWithLevel:0.15] set];

@@ -137,13 +137,10 @@
                                            [NSFont systemFontOfSize:11], NSFontAttributeName, 
                                            style, NSParagraphStyleAttributeName, nil];
     
-
 	NSAttributedString *primaryText = [[NSAttributedString alloc] initWithString:data
                                                                       attributes:attributes];
 
-    [controlView lockFocus];
 	[primaryText drawInRect:cellFrame];    
-    [controlView unlockFocus];
 }
 
 - (void) drawSecondaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
@@ -167,9 +164,7 @@
                                                      style, NSParagraphStyleAttributeName, nil];	
 	NSAttributedString *secondaryText = [[NSAttributedString alloc] initWithString:data
                                                                         attributes:attributes];
-    [controlView lockFocus];
     [secondaryText drawInRect:cellFrame];    
-    [controlView unlockFocus];
 }
 
 - (id) dataForKeyPath:(NSString *)keyPath

@@ -10,17 +10,13 @@
 
 @implementation ImageTextCell
 
+
+@synthesize padding;
 @synthesize iconKeyPath;
 @synthesize primaryTextKeyPath;
 @synthesize secondaryTextKeyPath;
 @synthesize highlightCellKeyPath;
 
-- (void) awakeFromNib
-{
-    [self setLineBreakMode:NSLineBreakByTruncatingTail];
-    [self setAllowsEditingTextAttributes:YES];
-    [self setWraps:YES];
-}
 
 - (id) objectValue 
 {
@@ -40,6 +36,9 @@
 
 - (void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView 
 {
+    if ( !self.padding )
+        self.padding = 5.00;
+
     // Draw background
     if ( [[self dataForKeyPath:highlightCellKeyPath] boolValue] == YES )
     {
@@ -50,8 +49,8 @@
 
 	// Draw primary text
     NSRect primaryRect = cellFrame;
-    primaryRect.origin.x = cellFrame.origin.x + cellFrame.size.height + 5;
-    primaryRect.origin.y += 5;
+    primaryRect.origin.x = cellFrame.origin.x + cellFrame.size.height + self.padding;
+    primaryRect.origin.y += self.padding;
     primaryRect.size.width -= 45;
     
     [self drawPrimaryTextWithFrame:primaryRect inView:controlView];
@@ -71,7 +70,10 @@
         return;
     }
 
-    NSColor *color = [NSColor colorWithCalibratedRed:216.00 / 255.00 green:248.00 / 255.00 blue:184.00 / 255.00 alpha:1];
+    NSColor *color = [NSColor colorWithCalibratedRed:216.00 / 255.00 
+                                               green:248.00 / 255.00 
+                                                blue:184.00 / 255.00 
+                                               alpha:1];
     NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[color highlightWithLevel:0.25]
                                                          endingColor:[color shadowWithLevel:0.10]];
 
@@ -85,35 +87,44 @@
 
 - (void) drawMainIconWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 {
-	[[NSGraphicsContext currentContext] saveGraphicsState];
-	float yOffset = cellFrame.origin.y;
-	if ( [controlView isFlipped] ) 
-    {
-		NSAffineTransform *xform = [NSAffineTransform transform];
-		[xform translateXBy:0.0 yBy: cellFrame.size.height];
-		[xform scaleXBy:1.0 yBy:-1.0];
-		[xform concat];		
-		yOffset = 0 - cellFrame.origin.y;
-	}	
-
-    int heightOffset = 6;
-    float fraction = 1;
-
     NSImage *icon = [self dataForKeyPath:iconKeyPath];
-	
-	NSImageInterpolation interpolation = [[NSGraphicsContext currentContext] imageInterpolation];
-	[[NSGraphicsContext currentContext] setImageInterpolation: NSImageInterpolationHigh];
-
+    NSSize imageSize = [icon size];
+    imageSize.height = cellFrame.size.height - self.padding;
+    imageSize.width = imageSize.height;
+    [icon setSize:imageSize];
+    
+    [[NSGraphicsContext currentContext] saveGraphicsState];
+    if ( [controlView isFlipped] ) 
+    {
+        NSAffineTransform *xform = [NSAffineTransform transform];
+        [xform translateXBy:0.0 yBy: cellFrame.size.height];
+        [xform scaleXBy:1.0 yBy:-1.0];
+        [xform concat];		
+        cellFrame.origin.y = 0 - cellFrame.origin.y;
+    }
+        
+    if ( [controlView isFlipped] )
+    {
+        cellFrame.origin.y += ( cellFrame.size.height - imageSize.height ) / 2;
+    }
+    else
+    {
+        cellFrame.origin.y += ( cellFrame.size.height + imageSize.height ) / 2;
+    }    
+        
+    NSImageInterpolation interpolation = [[NSGraphicsContext currentContext] imageInterpolation];
+    [[NSGraphicsContext currentContext] setImageInterpolation: NSImageInterpolationHigh];    
+    
     [controlView lockFocus];
-	[icon drawInRect:NSMakeRect( cellFrame.origin.x + 5, yOffset + 3,
-                                 cellFrame.size.height - heightOffset, cellFrame.size.height - heightOffset )
-			fromRect:NSMakeRect( 0, 0, [icon size].width, [icon size].height )
-		   operation:NSCompositeSourceOver
-			fraction:fraction];
-
+    [icon drawInRect:NSMakeRect( cellFrame.origin.x + self.padding, cellFrame.origin.y,
+                                imageSize.height, imageSize.height )
+            fromRect:NSMakeRect( 0, 0, [icon size].width, [icon size].height )
+           operation:NSCompositeSourceOver
+            fraction:1];
+    
     [controlView unlockFocus];
-	[[NSGraphicsContext currentContext] setImageInterpolation: interpolation];
-	[[NSGraphicsContext currentContext] restoreGraphicsState];	    
+    [[NSGraphicsContext currentContext] setImageInterpolation: interpolation];
+    [[NSGraphicsContext currentContext] restoreGraphicsState];	    
 }
 
 - (void) drawPrimaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
@@ -130,7 +141,6 @@
     // Create an NSMutableParagraphStyle to set up the line break mode.
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [style setLineBreakMode:NSLineBreakByTruncatingTail];
-//    [style setMaximumLineHeight:2.0];
 
 	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys: 
                                            primaryColor, NSForegroundColorAttributeName,

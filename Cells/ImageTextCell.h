@@ -9,14 +9,19 @@
 #import <Cocoa/Cocoa.h>
 
 
+
+
 @interface ImageTextCell : NSTextFieldCell
 {
-	NSString *iconKeyPath;
+    float padding;
+	
+    NSString *iconKeyPath;
 	NSString *primaryTextKeyPath;
 	NSString *secondaryTextKeyPath;
     NSString *highlightCellKeyPath;
 }
 
+@property( nonatomic, assign ) float padding;
 @property( nonatomic, retain ) NSString *iconKeyPath;
 @property( nonatomic, retain ) NSString *primaryTextKeyPath;
 @property( nonatomic, retain ) NSString *secondaryTextKeyPath;

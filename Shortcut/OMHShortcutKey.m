@@ -29,8 +29,8 @@ OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent,
 
 
 @implementation OMHShortcutKey
-@synthesize delegate;
 
+@synthesize delegate;
 
 #pragma mark -
 #pragma mark Class methods

@@ -10,7 +10,7 @@
 
 @interface OMHShortcutKey: NSObject 
 {
-    id delegate;   
+    id delegate;
 }
 
 // Properties

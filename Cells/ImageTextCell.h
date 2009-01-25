@@ -9,11 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 
-
-
 @interface ImageTextCell : NSTextFieldCell
 {
-    float padding;
+    float padding; // Defaults to 5.00
 	
     NSString *iconKeyPath;
 	NSString *primaryTextKeyPath;
@@ -26,12 +24,5 @@
 @property( nonatomic, retain ) NSString *primaryTextKeyPath;
 @property( nonatomic, retain ) NSString *secondaryTextKeyPath;
 @property( nonatomic, assign ) NSString *highlightCellKeyPath;
-
-- (id) dataForKeyPath:(NSString *)keyPath;
-
-- (void) drawHighlightInRect:(NSRect)cellFrame;
-- (void) drawMainIconWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (void) drawPrimaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (void) drawSecondaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 
 @end

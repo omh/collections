@@ -29,11 +29,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #import <Cocoa/Cocoa.h>
 
-
-@interface ImageTextCell : NSTextFieldCell
+@interface OMHImageTextCell : NSTextFieldCell
 {
     float padding; // Defaults to 5.00
 	

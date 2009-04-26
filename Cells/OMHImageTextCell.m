@@ -1,5 +1,5 @@
 /**
- * @file ImageTextCell.m
+ * @file OMHImageTextCell.m
  * @author Ole Morten Halvorsen
  *
  * @section LICENSE
@@ -29,9 +29,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "ImageTextCell.h"
+#import "OMHImageTextCell.h"
 
-@interface ImageTextCell( private )
+@interface OMHImageTextCell( private )
 
 - (id) dataForKeyPath:(NSString *)keyPath;
 
@@ -43,9 +43,8 @@
 @end
 
 
-
 #pragma mark -
-@implementation ImageTextCell( private )
+@implementation OMHImageTextCell( private )
 
 - (void) drawHighlightInRect:(NSRect)cellFrame;
 {
@@ -125,12 +124,7 @@
         return;
     }        
     
-	NSColor *primaryColor = [self isHighlighted] ? [self textColor] : [NSColor blackColor];    
-      
-//    if ( [[self dataForKeyPath:highlightCellKeyPath] boolValue] == YES && ! ([self isHighlighted] ) )
-//    {
-//        primaryColor = [NSColor whiteColor];
-//    }    
+	NSColor *primaryColor = [self isHighlighted] ? [self textColor] : [NSColor blackColor];
     
     // Create an NSMutableParagraphStyle to set up the line break mode.
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -157,12 +151,7 @@
     }
     
     NSColor *secondaryColor = [self isHighlighted] ? [self textColor]: [NSColor grayColor];
-//    
-//    if ( [[self dataForKeyPath:highlightCellKeyPath] boolValue] == YES && ! ([self isHighlighted] ) )
-//    {
-//        secondaryColor = [NSColor whiteColor];
-//    }
-//    
+
     // Create an NSMutableParagraphStyle to set up the line break mode.
     NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [style setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -184,15 +173,13 @@
 @end
 
 #pragma mark -
-@implementation ImageTextCell
-
+@implementation OMHImageTextCell
 
 @synthesize padding;
 @synthesize iconKeyPath;
 @synthesize primaryTextKeyPath;
 @synthesize secondaryTextKeyPath;
 @synthesize highlightCellKeyPath;
-
 
 - (id) objectValue 
 {

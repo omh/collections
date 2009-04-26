@@ -1,9 +1,9 @@
-//
-//  MAAttachedWindow.m
-//
-//  Created by Matt Gemmell on 27/09/2007.
-//  Copyright 2007 Magic Aubergine.
-//
+/**
+ * @file MAAttachedWindow.m
+ *
+ * LICENSE: Copyright 2007 Magic Aubergine.
+ * @author Matt Gemmell
+ */
 
 #import "MAAttachedWindow.h"
 

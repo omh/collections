@@ -35,7 +35,6 @@
 
 - (id) dataForKeyPath:(NSString *)keyPath;
 
-- (void) drawHighlightInRect:(NSRect)cellFrame;
 - (void) drawMainIconWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 - (void) drawPrimaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 - (void) drawSecondaryTextWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
@@ -45,33 +44,6 @@
 
 #pragma mark -
 @implementation OMHImageTextCell( private )
-
-- (void) drawHighlightInRect:(NSRect)cellFrame;
-{
-    if ( [self isHighlighted] )
-    {
-        return;
-    }
-    
-    NSColor *color = [NSColor colorWithCalibratedRed:104 / 255.00 
-                                               green:122 / 255.00 
-                                                blue:159 / 255.00 
-                                               alpha:0.8];
-    color = [NSColor alternateSelectedControlColor];
-    NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[color highlightWithLevel:0.20]
-                                                         endingColor:[color shadowWithLevel:0.1]];
-    
-    [gradient drawInRect:cellFrame angle:90];
-    
-    NSColor *borderColor = [NSColor colorWithCalibratedRed:87 / 255.00 
-                                                     green:87 / 255.00 
-                                                      blue:87 / 255.00 
-                                                     alpha:1];
-    [borderColor set];
-    cellFrame.origin.y = cellFrame.size.height - 1;
-    cellFrame.size.height = 1;
-    [[NSBezierPath bezierPathWithRect:cellFrame] fill];
-}
 
 - (void) drawMainIconWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
 {

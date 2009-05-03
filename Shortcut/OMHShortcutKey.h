@@ -33,20 +33,35 @@
 
 @interface OMHShortcutKey: NSObject 
 {
-    id delegate;
+    @protected
+        id delegate;
+        NSMutableDictionary *shortCutIds;
 }
 
-// Properties
+/**
+ * Holds the delegate object
+ */
 @property( nonatomic, assign ) id delegate;
 
-// Class methods
+/**
+ * Returns a shared (singleton) instance
+ */
 + (OMHShortcutKey *) sharedShortcutKey;
 
-// Instance methods
+/**
+ * Registers a shortcut key
+ *
+ * @param identifier String to identify the shortcut
+ * @param key Which key to use
+ * @param modifier Which modifier to use
+ */
 - (void) registerShortcutKey:(NSString *)identifier key:(signed short)key modifier:(unsigned int)modifier;
-- (void) unRegisterShortcutKey:(NSString *)identifier;
 
-// Delegation methods
-- (void) handleHotKey:(NSNumber *)hotKeyId;
+/**
+ * Unregisters a shortcut key
+ *
+ * @param identifier The identifier of the shortcut key to unregister
+ */
+- (void) unRegisterShortcutKey:(NSString *)identifier;
 
 @end

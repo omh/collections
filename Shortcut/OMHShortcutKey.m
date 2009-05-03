@@ -34,7 +34,7 @@
 
 
 @interface OMHShortcutKey()
-    NSMutableDictionary *shortCutIds;   
+    - (void) handleHotKey:(NSNumber *)hotKeyId;
 @end
 
 

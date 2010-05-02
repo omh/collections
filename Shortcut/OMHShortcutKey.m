@@ -29,7 +29,6 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Carbon/Carbon.h>
 #import "OMHShortcutKey.h"
 
 
@@ -37,6 +36,8 @@
     - (void) handleHotKey:(NSNumber *)hotKeyId;
 @end
 
+static OMHShortcutKey *sharedHotKey = nil;
+static NSUInteger hotKeyId = 0;
 
 OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent, void *userData )
 { 
@@ -51,21 +52,26 @@ OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent,
 }
 
 
+
 @implementation OMHShortcutKey
 
 @synthesize delegate;
+@synthesize shortCutIds;
 
 #pragma mark -
 #pragma mark Class methods
 
 + (OMHShortcutKey *) sharedShortcutKey
 {
-    static OMHShortcutKey *sharedHotKey;
-    
     if ( !sharedHotKey )
         sharedHotKey = [[OMHShortcutKey alloc] init];
     
     return sharedHotKey;
+}
+
++ (void) reset
+{
+    sharedHotKey = nil;
 }
 
 
@@ -87,7 +93,8 @@ OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void) registerShortcutKey:(NSString *)identifier key:(signed short)key modifier:(unsigned int)modifier;
 {
-    NSNumber *NSHotId = [NSNumber numberWithInt:[shortCutIds count] + 1];
+    hotKeyId++;
+    NSNumber *NSHotId = [NSNumber numberWithInt:hotKeyId];
     
     EventHotKeyRef hotKeyRef;
     EventHotKeyID hotKeyID;
@@ -110,19 +117,26 @@ OSStatus handleGlobalHotKey( EventHandlerCallRef nextHandler, EventRef theEvent,
 
 - (void) unRegisterShortcutKey:(NSString *)identifier;
 {
-    for ( id item in shortCutIds )
-    {   
+    id removeItem = nil;
+
+    for ( id item in self.shortCutIds )
+    {
         NSDictionary *dict = [shortCutIds objectForKey:item];
         if ( [[dict objectForKey:@"identifier"] isEqualToString:identifier] )
         {
             NSData *hotKeyRefData = [dict objectForKey:@"eventHotKeyRef"];
             EventHotKeyRef hotKeyRef;
             [hotKeyRefData getBytes:&hotKeyRef length:sizeof( EventHotKeyRef )];
-            
+
             UnregisterEventHotKey( hotKeyRef );
+
+            removeItem = item;
             break;
         }
     }
+    
+    if ( removeItem )
+        [self.shortCutIds removeObjectForKey:removeItem];
 }
 
 - (void) handleHotKey:(NSNumber *)hotKeyId;

@@ -30,13 +30,14 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <Carbon/Carbon.h>
 
 @interface OMHShortcutKey: NSObject 
 {
-    @protected
-        id delegate;
-        NSMutableDictionary *shortCutIds;
+    id delegate;
+    NSMutableDictionary *shortCutIds;
 }
+
 
 /**
  * Holds the delegate object
@@ -44,10 +45,26 @@
 @property( nonatomic, assign ) id delegate;
 
 /**
+ * Holds all registered shortcut keys
+ */
+@property( nonatomic, readonly ) id shortCutIds;
+
+
+#pragma mark -
+#pragma mark Class methods
+/**
  * Returns a shared (singleton) instance
  */
 + (OMHShortcutKey *) sharedShortcutKey;
 
+/*
+ * Resets the shared instance
+ */
++ (void) reset;
+
+
+#pragma mark -
+#pragma mark Instance methods
 /**
  * Registers a shortcut key
  *
@@ -63,5 +80,6 @@
  * @param identifier The identifier of the shortcut key to unregister
  */
 - (void) unRegisterShortcutKey:(NSString *)identifier;
+
 
 @end

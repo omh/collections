@@ -1,6 +1,5 @@
 /*
- * CocoaCryptoHashing.h
- * CocoaCryptoHashing
+ * OMHHashing.h
  */
 
 #import <Foundation/Foundation.h>

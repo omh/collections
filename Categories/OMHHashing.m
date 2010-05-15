@@ -1,9 +1,8 @@
 /*
- * CocoaCryptoHashing.m
- * CocoaCryptoHashing
+ * OMHHashing.m
  */
 
-#import "Hashing.h"
+#import "OMHHashing.h"
 
 #if TARGET_OS_MAC && (TARGET_OS_IPHONE || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4)
 
